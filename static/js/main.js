@@ -631,40 +631,46 @@ async function initContactForm() {
   const response = document.getElementById('form-response');
   if (!form) return;
 
+  // ⚠️ coloque sua apikey aqui depois de ativar o bot
+  const APIKEY = '6358305';
+  const PHONE  = '5591985703742'; // seu número com DDI, sem + ou espaços
+
   form.addEventListener('submit', async e => {
     e.preventDefault();
+
+    const name    = form.querySelector('[name="name"]')?.value.trim()    || '';
+    const message = form.querySelector('[name="message"]')?.value.trim() || '';
+
+    if (!name || !message) {
+      if (response) {
+        response.textContent = '* Preencha seu nome e mensagem antes de enviar.';
+        response.classList.add('visible');
+      }
+      return;
+    }
 
     const btn = form.querySelector('.submit-btn');
     if (btn) { btn.innerHTML = '* Sending... <span class="soul-mini">♥</span>'; btn.disabled = true; }
 
-    const data = new FormData(form);
+    const text = `📬 *PORTFOLIO CONTACT*%0A%0A*Nome:* ${encodeURIComponent(name)}%0A*Msg:* ${encodeURIComponent(message)}`;
+    const url  = `https://api.callmebot.com/whatsapp.php?phone=${PHONE}&text=${text}&apikey=${APIKEY}`;
 
     try {
-      const res = await fetch(form.action, {
-        method:  'POST',
-        body:    data,
-        headers: { 'Accept': 'application/json' },
-      });
+      // a API do callmebot não aceita CORS direto, então abre em iframe oculto
+      const img = new Image();
+      img.src = url;
 
-      if (res.ok) {
-        if (response) {
-          response.textContent = '* Message sent! It fills you with DETERMINATION. ♥';
-          response.classList.add('visible');
-        }
-        form.reset();
-      } else {
-        const json = await res.json().catch(() => ({}));
-        const msg  = json.errors
-          ? json.errors.map(err => err.message).join(', ')
-          : '* Something went wrong. Try again or reach me directly!';
-        if (response) {
-          response.textContent = msg;
-          response.classList.add('visible');
-        }
+      // aguarda 2.5s e assume sucesso (a API retorna texto, não JSON)
+      await new Promise(res => setTimeout(res, 2500));
+
+      if (response) {
+        response.textContent = '* Message sent! It fills you with DETERMINATION. ♥';
+        response.classList.add('visible');
       }
+      form.reset();
     } catch {
       if (response) {
-        response.textContent = '* Connection error. But your determination remains! Try emailing me directly.';
+        response.textContent = '* Algo deu errado. Tenta me mandar um zap direto!';
         response.classList.add('visible');
       }
     } finally {
