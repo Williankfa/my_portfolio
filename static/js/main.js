@@ -633,7 +633,7 @@ async function initContactForm() {
 
   // ⚠️ coloque sua apikey aqui depois de ativar o bot
   const APIKEY = '6358305';
-  const PHONE  = '5591985703742'; // seu número com DDI, sem + ou espaços
+  const PHONE  = '+5591985703742'; // seu número com DDI, sem + ou espaços
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
