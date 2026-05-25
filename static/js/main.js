@@ -42,12 +42,12 @@ class SoulCursor {
 // TYPEWRITER EFFECT
 class Typewriter {
   constructor(el, text, speed = 38) {
-    this.el      = el;
-    this.text    = text;
-    this.speed   = speed;
-    this.idx     = 0;
+    this.el       = el;
+    this.text     = text;
+    this.speed    = speed;
+    this.idx      = 0;
     this._stopped = false;
-    this.cursor  = el.parentElement ? el.parentElement.querySelector('.dialogue-cursor') : null;
+    // cursor removido — causava o quadradinho piscando no canto errado
   }
 
   stop() {
@@ -56,7 +56,6 @@ class Typewriter {
 
   start() {
     this._stopped = false;
-    if (this.cursor) this.cursor.style.display = 'inline-block';
     this.el.textContent = '';
     this.idx = 0;
     this._type();
@@ -69,8 +68,6 @@ class Typewriter {
       this.el.textContent += this.text[this.idx++];
       const jitter = Math.random() * 20 - 10;
       setTimeout(() => this._type(), this.speed + jitter);
-    } else {
-      if (this.cursor) this.cursor.style.animationPlayState = 'running';
     }
   }
 }
@@ -535,52 +532,36 @@ function observeSkills() {
     barObserver.observe(expSection);
   }
 }
+
 // ABOUT SECTION TYPEWRITER
 
 function initAboutTypewriter() {
-  const textEl      = document.getElementById('dialogue-text-content');
+  const textEl       = document.getElementById('dialogue-text-content');
   const aboutSection = document.getElementById('about');
   if (!textEl || !aboutSection) return;
 
-  let activeTw = null;
+  // esconde o cursor externo — ele não acompanha o texto inline
+  const cursorEl = textEl.parentElement?.querySelector('.dialogue-cursor');
+  if (cursorEl) cursorEl.style.display = 'none';
+
+  let fired = false;
 
   const io = new IntersectionObserver(([e]) => {
-    if (e.isIntersecting) {
-      if (activeTw) {
-        activeTw.stop();
-        activeTw = null;
-      }
+    if (!e.isIntersecting || fired) return;
+    fired = true;
 
-      const fullText = textEl.dataset.text || '';
-      textEl.textContent = '';
+    const fullText = textEl.dataset.text || '';
+    textEl.textContent = '';
 
-      const tw = new Typewriter(textEl, fullText, 35);
-      activeTw = tw;
-      window._currentDialogueTw = tw;
+    const tw = new Typewriter(textEl, fullText, 35);
+    window._currentDialogueTw = tw;
+    setTimeout(() => tw.start(), 600);
 
-      setTimeout(() => tw.start(), 600);
+    setTimeout(() => {
+      document.querySelectorAll('.stat-bar-fill').forEach(bar => bar.classList.add('go'));
+    }, 900);
 
-      setTimeout(() => {
-        document.querySelectorAll('.stat-bar-fill').forEach(bar => {
-          bar.classList.add('go');
-        });
-      }, 900);
-
-    } else {
-      if (activeTw) {
-        activeTw.stop();
-        activeTw = null;
-        window._currentDialogueTw = null;
-      }
-
-      textEl.textContent = '';
-      document.querySelectorAll('.stat-bar-fill').forEach(bar => {
-        bar.classList.remove('go');
-      });
-      aboutSection.querySelectorAll('[data-reveal].revealed').forEach(el => {
-        el.classList.remove('revealed');
-      });
-    }
+    io.unobserve(aboutSection);
   }, { threshold: 0.25 });
 
   io.observe(aboutSection);
