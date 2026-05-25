@@ -70,7 +70,10 @@ class Typewriter {
       const jitter = Math.random() * 20 - 10;
       setTimeout(() => this._type(), this.speed + jitter);
     } else {
-      if (this.cursor) this.cursor.style.animationPlayState = 'running';
+      // digitação completa — esconde o cursor
+      if (this.cursor) {
+        this.cursor.style.display = 'none';
+      }
     }
   }
 }
@@ -87,7 +90,8 @@ class ScrollReveal {
           if (e.target.classList.contains('stagger-children')) {
             e.target.classList.add('revealed');
           }
-          // não remove ao sair — evita flash branco
+        } else {
+          e.target.classList.remove('revealed');
         }
       }),
       { threshold: 0.12, rootMargin: '0px 0px -60px 0px' }
@@ -497,17 +501,22 @@ function observeSkills() {
 
   if (skillsBlock) {
     const slotObserver = new IntersectionObserver(([e]) => {
-      if (!e.isIntersecting) return;
-      slotObserver.disconnect();
-      skillsBlock.querySelectorAll('.inv-slot').forEach((slot, i) => {
-        slot.style.opacity = '0';
-        slot.style.transform = 'scale(0.7)';
-        setTimeout(() => {
-          slot.style.transition = 'opacity 0.3s steps(4), transform 0.3s steps(4)';
-          slot.style.opacity = '1';
-          slot.style.transform = 'scale(1)';
-        }, i * 80);
-      });
+      if (e.isIntersecting) {
+        skillsBlock.querySelectorAll('.inv-slot').forEach((slot, i) => {
+          slot.style.opacity = '0';
+          slot.style.transform = 'scale(0.7)';
+          setTimeout(() => {
+            slot.style.transition = 'opacity 0.3s steps(4), transform 0.3s steps(4)';
+            slot.style.opacity = '1';
+            slot.style.transform = 'scale(1)';
+          }, i * 80);
+        });
+      } else {
+        skillsBlock.querySelectorAll('.inv-slot').forEach(slot => {
+          slot.style.opacity = '0';
+          slot.style.transform = 'scale(0.7)';
+        });
+      }
     }, { threshold: 0.1 });
 
     slotObserver.observe(skillsBlock);
@@ -515,16 +524,21 @@ function observeSkills() {
 
   if (expSection) {
     const barObserver = new IntersectionObserver(([e]) => {
-      if (!e.isIntersecting) return;
-      barObserver.disconnect();
-      animateExpBars();
+      if (e.isIntersecting) {
+        animateExpBars();
+      } else {
+        expSection.querySelectorAll('.exp-bar-fill').forEach(bar => {
+          bar.style.transition = 'none';
+          bar.style.width = '0%';
+        });
+      }
     }, { threshold: 0.2 });
 
     barObserver.observe(expSection);
   }
 }
 
-// ABOUT SECTION TYPEWRITER — roda uma única vez, nunca reseta
+// ABOUT SECTION TYPEWRITER — roda só uma vez, cursor some ao terminar
 
 function initAboutTypewriter() {
   const textEl       = document.getElementById('dialogue-text-content');
