@@ -651,7 +651,7 @@ async function initContactForm() {
     const btn = form.querySelector('.submit-btn');
     if (btn) { btn.innerHTML = '* Sending... <span class="soul-mini">♥</span>'; btn.disabled = true; }
 
-    const text = `📬 *PORTFOLIO CONTACT*\n\n*Nome:* ${name}\n*Msg:* ${message}`;
+    const text = ` *PORTFOLIO CONTACT*\n\n*Nome:* ${name}\n*Msg:* ${message}`;
 
     try {
       const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
