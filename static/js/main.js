@@ -250,7 +250,7 @@ const SKILLS_DATA = [
   { name: 'VS Code',         iconSlug: 'visualstudiocode',          iconColor: '007ACC', tier: 'stone', lvl: '★★★★★', desc: 'Editor principal — extensões e produtividade.' },
   { name: 'Algorithms',      iconSlug: 'leetcode',        iconColor: 'FFA116', tier: 'ruby',  lvl: '★★★☆☆', desc: 'Algoritmos e resolução de problemas lógicos.' },
   { name: 'Data Structures', iconSlug: 'stackoverflow',   iconColor: 'F58025', tier: 'ruby',  lvl: '★★☆☆☆', desc: 'Estruturas de dados fundamentais em estudo.' },
-  { name: 'Clean Code',      iconSlug: 'sonarqube',       iconColor: '4E9BCD', tier: 'stone', lvl: '★★★☆☆', desc: 'Código legível, padrões e boas práticas.' },
+  { name: 'Shell',           iconSlug: 'gnubash',         iconColor: '4EAA25', tier: 'stone', lvl: '★★★☆☆', desc: 'Scripts bash, terminal e automação de tarefas.' },
   { name: 'Agile / Scrum',   iconSlug: 'jira',            iconColor: '0052CC', tier: 'stone', lvl: '★★☆☆☆', desc: 'Metodologias ágeis e entrega incremental.' },
 ];
 
@@ -258,7 +258,7 @@ const EXP_BARS = [
   { label: 'Frontend',   pct: 70, cls: 'gold' },
   { label: 'Logic',      pct: 65, cls: 'gem'  },
   { label: 'Git Flow',   pct: 75, cls: 'ruby' },
-  { label: 'Clean Code', pct: 60, cls: 'gold' },
+  { label: 'Shell',      pct: 60, cls: 'gold' },
   { label: 'Agile',      pct: 50, cls: 'gem'  },
   { label: 'Communication', pct: 85, cls: 'ruby' },
 ];
@@ -270,14 +270,13 @@ function buildInventory() {
     const slot = document.createElement('div');
     slot.className = 'inv-slot';
     slot.style.transitionDelay = `${i * 0.06}s`;
-    const iconUrl = `https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${skill.iconSlug}.svg`;
+    const iconUrl = `https://cdn.simpleicons.org/${skill.iconSlug}/${skill.iconColor}`;
     slot.innerHTML = `
       <img class="inv-icon-img"
            src="${iconUrl}"
            alt="${skill.name}"
            width="44" height="44"
            loading="lazy"
-           style="filter: invert(1);"
            onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'inv-icon',textContent:'◈'}))"
       />
       <span class="inv-name">${skill.name}</span>
