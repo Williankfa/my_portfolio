@@ -313,8 +313,7 @@ function animateExpBars() {
 }
 
 // ================================================================
-// PROJECTS GRID — substitui o BattleSystem
-// Grade 2×2 com cards completos, descrições detalhadas e links corretos
+// PROJECTS GRID
 // ================================================================
 
 const PROJECTS_DATA = [
@@ -368,7 +367,6 @@ const PROJECTS_DATA = [
   },
 ];
 
-// SVG icons para cada projeto
 const PROJECT_SVG_ICONS = {
   wasm: `<svg viewBox="0 0 24 24" width="52" height="52" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
@@ -400,13 +398,11 @@ function buildProjectsGrid() {
     if (proj.wip) card.classList.add('proj-card--wip');
     card.style.animationDelay = `${i * 0.08}s`;
 
-    // Badge HTML
     let badgeHTML = '';
     if (proj.badge) {
       badgeHTML = `<span class="proj-badge" style="border-color:${proj.badgeColor};color:${proj.badgeColor};">${proj.badge}</span>`;
     }
 
-    // Actions HTML
     let actionsHTML = '';
     if (proj.wip) {
       actionsHTML = `<span class="proj-btn proj-btn--soon">EM BREVE</span>`;
@@ -439,9 +435,7 @@ function buildProjectsGrid() {
       <div class="proj-actions">${actionsHTML}</div>
     `;
 
-    // Acento de cor na borda esquerda ao hover
     card.style.setProperty('--proj-accent', proj.color);
-
     grid.appendChild(card);
   });
 }
@@ -640,7 +634,9 @@ class ChiptuneAudio {
   }
 }
 
-// CONTACT FORM
+// ================================================================
+// CONTACT FORM — Formspree (fetch/AJAX, sem redirect)
+// ================================================================
 
 async function initContactForm() {
   const form     = document.getElementById('contact-form');
@@ -649,32 +645,42 @@ async function initContactForm() {
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
-    const name = form.querySelector('[name="name"]')?.value ?? '';
-    const msg  = form.querySelector('[name="message"]')?.value ?? '';
-    const btn  = form.querySelector('.submit-btn');
 
-    if (btn) { btn.textContent = '* Sending...'; btn.disabled = true; }
+    const btn = form.querySelector('.submit-btn');
+    if (btn) { btn.innerHTML = '* Sending... <span class="soul-mini">♥</span>'; btn.disabled = true; }
+
+    const data = new FormData(form);
 
     try {
-      const res  = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, message: msg }),
+      const res = await fetch(form.action, {
+        method:  'POST',
+        body:    data,
+        headers: { 'Accept': 'application/json' },
       });
-      const data = await res.json();
 
-      if (response) {
-        response.textContent = data.message;
-        response.classList.add('visible');
+      if (res.ok) {
+        if (response) {
+          response.textContent = '* Message sent! It fills you with DETERMINATION. ♥';
+          response.classList.add('visible');
+        }
+        form.reset();
+      } else {
+        const json = await res.json().catch(() => ({}));
+        const msg  = json.errors
+          ? json.errors.map(err => err.message).join(', ')
+          : '* Something went wrong. Try again or reach me directly!';
+        if (response) {
+          response.textContent = msg;
+          response.classList.add('visible');
+        }
       }
-      form.reset();
     } catch {
       if (response) {
-        response.textContent = '* Something went wrong. But your determination remains!';
+        response.textContent = '* Connection error. But your determination remains! Try emailing me directly.';
         response.classList.add('visible');
       }
     } finally {
-      if (btn) { btn.textContent = 'SEND'; btn.disabled = false; }
+      if (btn) { btn.innerHTML = 'SEND <span class="soul-mini">♥</span>'; btn.disabled = false; }
     }
   });
 }
