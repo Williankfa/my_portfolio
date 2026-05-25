@@ -488,21 +488,31 @@ function observeSkills() {
   const expSection  = document.getElementById('exp-bars');
 
   if (skillsBlock) {
+    let slotTimers = [];
+
     const slotObserver = new IntersectionObserver(([e]) => {
+      // cancela timers anteriores antes de qualquer coisa
+      slotTimers.forEach(t => clearTimeout(t));
+      slotTimers = [];
+
       if (e.isIntersecting) {
         skillsBlock.querySelectorAll('.inv-slot').forEach((slot, i) => {
-          slot.style.opacity = '0';
-          slot.style.transform = 'scale(0.7)';
-          setTimeout(() => {
+          slot.style.transition = 'none';
+          slot.style.opacity    = '0';
+          slot.style.transform  = 'scale(0.7)';
+          slot.offsetWidth; // força reflow antes de animar
+          const t = setTimeout(() => {
             slot.style.transition = 'opacity 0.3s steps(4), transform 0.3s steps(4)';
-            slot.style.opacity = '1';
-            slot.style.transform = 'scale(1)';
+            slot.style.opacity    = '1';
+            slot.style.transform  = 'scale(1)';
           }, i * 80);
+          slotTimers.push(t);
         });
       } else {
         skillsBlock.querySelectorAll('.inv-slot').forEach(slot => {
-          slot.style.opacity = '0';
-          slot.style.transform = 'scale(0.7)';
+          slot.style.transition = 'none';
+          slot.style.opacity    = '0';
+          slot.style.transform  = 'scale(0.7)';
         });
       }
     }, { threshold: 0.1 });
@@ -525,7 +535,6 @@ function observeSkills() {
     barObserver.observe(expSection);
   }
 }
-
 // ABOUT SECTION TYPEWRITER
 
 function initAboutTypewriter() {
