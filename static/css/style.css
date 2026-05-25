@@ -1661,3 +1661,236 @@ section {
   .proj-card-top { gap: 14px; }
   .proj-desc { font-size: 16px; }
 }
+/* ================================================================
+   MOBILE FIXES — RESPONSIVE APRIMORADO
+   ================================================================ */
+
+/* NAV: logo menor + lang toggle cabe */
+@media (max-width: 768px) {
+  .pixel-nav {
+    padding: 0 16px;
+    gap: 8px;
+  }
+
+  .nav-logo {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  .lang-btn {
+    padding: 8px 10px;
+    font-size: 8px;
+  }
+}
+
+/* HERO: textos e botões não cortam */
+@media (max-width: 600px) {
+  .hero-content {
+    padding: 40px 20px 80px;
+  }
+
+  .hero-eyebrow {
+    font-size: 6px;
+    letter-spacing: 3px;
+  }
+
+  .hero-title {
+    font-size: clamp(20px, 8vw, 36px);
+    word-break: break-word;
+  }
+
+  .hero-subtitle {
+    font-size: 18px;
+    letter-spacing: 1px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .pixel-btn {
+    width: 100%;
+    max-width: 260px;
+    justify-content: center;
+    font-size: 7px;
+    padding: 14px 20px;
+  }
+
+  .scroll-hint { display: none; }
+}
+
+/* ABOUT: espaçamento e foto */
+@media (max-width: 600px) {
+  #about {
+    padding: 60px 0 80px;
+  }
+
+  .container {
+    padding: 0 18px;
+  }
+
+  .about-inner {
+    gap: 36px;
+  }
+
+  .about-photo-wrap {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .about-photo-info {
+    align-items: center;
+  }
+
+  .dialogue-box {
+    padding: 20px 18px;
+    margin-top: 24px;
+  }
+
+  .dialogue-text {
+    font-size: 19px;
+  }
+
+  /* RPG stats: label + valor empilhados em telas muito pequenas */
+  .stat-row {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 0;
+  }
+
+  .stat-label {
+    width: 70px;
+    font-size: 6px;
+  }
+
+  .stat-value {
+    font-size: 19px;
+  }
+
+  .section-heading {
+    font-size: clamp(11px, 3.5vw, 18px);
+  }
+}
+
+/* INVENTORY GRID: 2 colunas no mobile */
+@media (max-width: 600px) {
+  .inventory-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .inv-slot {
+    min-height: 120px;
+    padding: 18px 10px 14px;
+    gap: 10px;
+  }
+
+  .inv-name {
+    font-size: 5px;
+  }
+
+  .inv-tier {
+    font-size: 5px;
+  }
+
+  /* tooltip desabilita no mobile (sem hover) */
+  .inv-slot .tooltip {
+    display: none;
+  }
+
+  .exp-bars {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .exp-bar-label {
+    font-size: 18px;
+  }
+}
+
+/* PROJECTS: cards empilhados */
+@media (max-width: 600px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .proj-card {
+    padding: 20px 16px 16px;
+  }
+
+  .proj-name {
+    font-size: 8px;
+  }
+
+  .proj-desc {
+    font-size: 17px;
+  }
+
+  .battle-header {
+    margin-bottom: 32px;
+  }
+
+  .battle-header .section-heading {
+    font-size: clamp(11px, 3.5vw, 18px);
+  }
+}
+
+/* CONTACT: formulário e links */
+@media (max-width: 600px) {
+  .contact-inner-merged {
+    gap: 40px;
+  }
+
+  .contact-left h2 {
+    font-size: clamp(13px, 4vw, 20px);
+    margin-bottom: 24px;
+  }
+
+  .contact-link {
+    font-size: 20px;
+    padding: 10px 10px;
+    gap: 10px;
+  }
+
+  .contact-link:hover {
+    padding-left: 18px;
+  }
+
+  .form-field input,
+  .form-field textarea {
+    font-size: 20px;
+  }
+
+  .submit-btn {
+    font-size: 8px;
+    padding: 16px 28px;
+    align-self: stretch;
+    text-align: center;
+  }
+}
+
+/* FOOTER */
+@media (max-width: 600px) {
+  .pixel-footer {
+    padding: 32px 18px;
+    font-size: 6px;
+  }
+}
+
+/* TELAS MUITO PEQUENAS (< 380px) */
+@media (max-width: 380px) {
+  .hero-title {
+    font-size: 18px;
+  }
+
+  .inventory-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .nav-logo {
+    font-size: 7px;
+  }
+}
