@@ -18,7 +18,8 @@ def contact():
         return jsonify({'status': 'error', 'message': '* Preencha todos os campos!'}), 400
 
     api_key = os.environ.get('RESEND_API_KEY')
-
+    print(f'[DEBUG] API KEY: {api_key}')
+    
     if api_key:
         try:
             resend.api_key = api_key
