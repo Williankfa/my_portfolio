@@ -631,9 +631,8 @@ async function initContactForm() {
   const response = document.getElementById('form-response');
   if (!form) return;
 
-  // ⚠️ coloque sua apikey aqui depois de ativar o bot
-  const APIKEY = '6358305';
-  const PHONE  = '+5591985703742'; // seu número com DDI, sem + ou espaços
+  const BOT_TOKEN = '8801591036:AAEFOJCi5Waey7ug2GifmLZ_YjJ2Sp3eEC4';
+  const CHAT_ID   = '8051815434';
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
@@ -652,25 +651,33 @@ async function initContactForm() {
     const btn = form.querySelector('.submit-btn');
     if (btn) { btn.innerHTML = '* Sending... <span class="soul-mini">♥</span>'; btn.disabled = true; }
 
-    const text = `📬 *PORTFOLIO CONTACT*%0A%0A*Nome:* ${encodeURIComponent(name)}%0A*Msg:* ${encodeURIComponent(message)}`;
-    const url  = `https://api.callmebot.com/whatsapp.php?phone=${PHONE}&text=${text}&apikey=${APIKEY}`;
+    const text = `📬 *PORTFOLIO CONTACT*\n\n*Nome:* ${name}\n*Msg:* ${message}`;
 
     try {
-      // a API do callmebot não aceita CORS direto, então abre em iframe oculto
-      const img = new Image();
-      img.src = url;
+      const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id:    CHAT_ID,
+          text:       text,
+          parse_mode: 'Markdown',
+        }),
+      });
 
-      // aguarda 2.5s e assume sucesso (a API retorna texto, não JSON)
-      await new Promise(res => setTimeout(res, 2500));
+      const data = await res.json();
 
-      if (response) {
-        response.textContent = '* Message sent! It fills you with DETERMINATION. ♥';
-        response.classList.add('visible');
+      if (data.ok) {
+        if (response) {
+          response.textContent = '* Message sent! It fills you with DETERMINATION. ♥';
+          response.classList.add('visible');
+        }
+        form.reset();
+      } else {
+        throw new Error(data.description || 'Telegram error');
       }
-      form.reset();
-    } catch {
+    } catch (err) {
       if (response) {
-        response.textContent = '* Algo deu errado. Tenta me mandar um zap direto!';
+        response.textContent = `* Algo deu errado: ${err.message}`;
         response.classList.add('visible');
       }
     } finally {
