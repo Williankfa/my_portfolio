@@ -247,7 +247,7 @@ const SKILLS_DATA = [
   { name: 'Python',          iconSlug: 'python',          iconColor: '3776AB', tier: 'gem',   lvl: '★★★☆☆', desc: 'Algoritmos, lógica e automação de scripts.' },
   { name: 'Git',             iconSlug: 'git',             iconColor: 'F05032', tier: 'gold',  lvl: '★★★★☆', desc: 'Controle de versão e git workflow na prática.' },
   { name: 'GitHub',          iconSlug: 'github',          iconColor: '181717', tier: 'gem',   lvl: '★★★★☆', desc: 'Repositórios, colaboração e projetos open source.' },
-  { name: 'VS Code',         iconSlug: 'visualstudiocode', iconColor: '007ACC', tier: 'stone', lvl: '★★★★★', desc: 'Editor principal — extensões e produtividade.' },
+  { name: 'VS Code',         iconSlug: 'visualstudiocode',          iconColor: '007ACC', tier: 'stone', lvl: '★★★★★', desc: 'Editor principal — extensões e produtividade.' },
   { name: 'Algorithms',      iconSlug: 'leetcode',        iconColor: 'FFA116', tier: 'ruby',  lvl: '★★★☆☆', desc: 'Algoritmos e resolução de problemas lógicos.' },
   { name: 'Data Structures', iconSlug: 'stackoverflow',   iconColor: 'F58025', tier: 'ruby',  lvl: '★★☆☆☆', desc: 'Estruturas de dados fundamentais em estudo.' },
   { name: 'Clean Code',      iconSlug: 'sonarqube',       iconColor: '4E9BCD', tier: 'stone', lvl: '★★★☆☆', desc: 'Código legível, padrões e boas práticas.' },
@@ -270,15 +270,14 @@ function buildInventory() {
     const slot = document.createElement('div');
     slot.className = 'inv-slot';
     slot.style.transitionDelay = `${i * 0.06}s`;
-  const iconUrl = skill.iconSlug === 'visualstudiocode'
-    ? `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23007ACC' d='M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 19.923V4.077a1.5 1.5 0 0 0-.85-1.49zm-5.146 14.861L10.826 12l7.178-5.448v10.896z'/%3E%3C/svg%3E`
-    : `https://cdn.simpleicons.org/${skill.iconSlug}/${skill.iconColor}`;
+    const iconUrl = `https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${skill.iconSlug}.svg`;
     slot.innerHTML = `
       <img class="inv-icon-img"
            src="${iconUrl}"
            alt="${skill.name}"
            width="44" height="44"
            loading="lazy"
+           style="filter: invert(1);"
            onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'inv-icon',textContent:'◈'}))"
       />
       <span class="inv-name">${skill.name}</span>
