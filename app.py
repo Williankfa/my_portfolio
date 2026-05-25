@@ -40,12 +40,7 @@ def contact():
 
 @app.route('/api/status')
 def status():
-    return jsonify({
-        'status': 'DETERMINED',
-        'hp': 9999,
-        'lv': 'LOVE',
-        'message': 'It fills you with determination.'
-    })
+    return jsonify({'status': 'DETERMINED'})
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
