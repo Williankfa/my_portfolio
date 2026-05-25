@@ -479,31 +479,29 @@ function observeSectionTransitions() {
 
 
 // SKILLS OBSERVER
-
 function observeSkills() {
   const skillsBlock = document.querySelector('.inventory-grid');
   const expSection  = document.getElementById('exp-bars');
 
   if (skillsBlock) {
-    let slotTimers = [];
+    let generation = 0; // ← chave da correção
 
     const slotObserver = new IntersectionObserver(([e]) => {
-      // cancela timers anteriores antes de qualquer coisa
-      slotTimers.forEach(t => clearTimeout(t));
-      slotTimers = [];
+      const myGen = ++generation; // incrementa a cada disparo
 
       if (e.isIntersecting) {
         skillsBlock.querySelectorAll('.inv-slot').forEach((slot, i) => {
           slot.style.transition = 'none';
           slot.style.opacity    = '0';
           slot.style.transform  = 'scale(0.7)';
-          slot.offsetWidth; // força reflow antes de animar
-          const t = setTimeout(() => {
+          slot.offsetWidth; // força reflow
+
+          setTimeout(() => {
+            if (generation !== myGen) return; // timer de geração antiga → ignora
             slot.style.transition = 'opacity 0.3s steps(4), transform 0.3s steps(4)';
             slot.style.opacity    = '1';
             slot.style.transform  = 'scale(1)';
           }, i * 80);
-          slotTimers.push(t);
         });
       } else {
         skillsBlock.querySelectorAll('.inv-slot').forEach(slot => {
