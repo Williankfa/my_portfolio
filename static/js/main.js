@@ -42,33 +42,35 @@ class SoulCursor {
 // TYPEWRITER EFFECT
 class Typewriter {
   constructor(el, text, speed = 38) {
-    this.el      = el;
-    this.text    = text;
-    this.speed   = speed;
-    this.idx     = 0;
-    this._stopped = false;
-    this.cursor  = el.parentElement ? el.parentElement.querySelector('.dialogue-cursor') : null;
+    this.el     = el;
+    this.text   = text;
+    this.speed  = speed;
+    this.idx    = 0;
+    this._gen   = 0; // geração atual — invalida timeouts antigos
+    this.cursor = el.parentElement ? el.parentElement.querySelector('.dialogue-cursor') : null;
   }
 
   stop() {
-    this._stopped = true;
+    this._gen++; // qualquer timeout pendente da geração anterior é ignorado
+    this.el.textContent = '';
   }
 
   start() {
-    this._stopped = false;
+    this._gen++;
+    const gen = this._gen;
     if (this.cursor) this.cursor.style.display = 'inline-block';
     this.el.textContent = '';
     this.idx = 0;
-    this._type();
+    this._type(gen);
   }
 
-  _type() {
-    if (this._stopped) return;
+  _type(gen) {
+    if (gen !== this._gen) return; // timeout stale — descarta
 
     if (this.idx < this.text.length) {
       this.el.textContent += this.text[this.idx++];
       const jitter = Math.random() * 20 - 10;
-      setTimeout(() => this._type(), this.speed + jitter);
+      setTimeout(() => this._type(gen), this.speed + jitter);
     } else {
       if (this.cursor) this.cursor.style.animationPlayState = 'running';
     }
