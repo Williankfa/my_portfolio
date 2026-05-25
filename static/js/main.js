@@ -42,35 +42,33 @@ class SoulCursor {
 // TYPEWRITER EFFECT
 class Typewriter {
   constructor(el, text, speed = 38) {
-    this.el     = el;
-    this.text   = text;
-    this.speed  = speed;
-    this.idx    = 0;
-    this._gen   = 0; // geração atual — invalida timeouts antigos
-    this.cursor = el.parentElement ? el.parentElement.querySelector('.dialogue-cursor') : null;
+    this.el      = el;
+    this.text    = text;
+    this.speed   = speed;
+    this.idx     = 0;
+    this._stopped = false;
+    this.cursor  = el.parentElement ? el.parentElement.querySelector('.dialogue-cursor') : null;
   }
 
   stop() {
-    this._gen++; // qualquer timeout pendente da geração anterior é ignorado
-    this.el.textContent = '';
+    this._stopped = true;
   }
 
   start() {
-    this._gen++;
-    const gen = this._gen;
+    this._stopped = false;
     if (this.cursor) this.cursor.style.display = 'inline-block';
     this.el.textContent = '';
     this.idx = 0;
-    this._type(gen);
+    this._type();
   }
 
-  _type(gen) {
-    if (gen !== this._gen) return; // timeout stale — descarta
+  _type() {
+    if (this._stopped) return;
 
     if (this.idx < this.text.length) {
       this.el.textContent += this.text[this.idx++];
       const jitter = Math.random() * 20 - 10;
-      setTimeout(() => this._type(gen), this.speed + jitter);
+      setTimeout(() => this._type(), this.speed + jitter);
     } else {
       if (this.cursor) this.cursor.style.animationPlayState = 'running';
     }
@@ -89,8 +87,7 @@ class ScrollReveal {
           if (e.target.classList.contains('stagger-children')) {
             e.target.classList.add('revealed');
           }
-        } else {
-          e.target.classList.remove('revealed');
+          // não remove ao sair — evita flash branco
         }
       }),
       { threshold: 0.12, rootMargin: '0px 0px -60px 0px' }
@@ -500,22 +497,17 @@ function observeSkills() {
 
   if (skillsBlock) {
     const slotObserver = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) {
-        skillsBlock.querySelectorAll('.inv-slot').forEach((slot, i) => {
-          slot.style.opacity = '0';
-          slot.style.transform = 'scale(0.7)';
-          setTimeout(() => {
-            slot.style.transition = 'opacity 0.3s steps(4), transform 0.3s steps(4)';
-            slot.style.opacity = '1';
-            slot.style.transform = 'scale(1)';
-          }, i * 80);
-        });
-      } else {
-        skillsBlock.querySelectorAll('.inv-slot').forEach(slot => {
-          slot.style.opacity = '0';
-          slot.style.transform = 'scale(0.7)';
-        });
-      }
+      if (!e.isIntersecting) return;
+      slotObserver.disconnect();
+      skillsBlock.querySelectorAll('.inv-slot').forEach((slot, i) => {
+        slot.style.opacity = '0';
+        slot.style.transform = 'scale(0.7)';
+        setTimeout(() => {
+          slot.style.transition = 'opacity 0.3s steps(4), transform 0.3s steps(4)';
+          slot.style.opacity = '1';
+          slot.style.transform = 'scale(1)';
+        }, i * 80);
+      });
     }, { threshold: 0.1 });
 
     slotObserver.observe(skillsBlock);
@@ -523,66 +515,42 @@ function observeSkills() {
 
   if (expSection) {
     const barObserver = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) {
-        animateExpBars();
-      } else {
-        expSection.querySelectorAll('.exp-bar-fill').forEach(bar => {
-          bar.style.transition = 'none';
-          bar.style.width = '0%';
-        });
-      }
+      if (!e.isIntersecting) return;
+      barObserver.disconnect();
+      animateExpBars();
     }, { threshold: 0.2 });
 
     barObserver.observe(expSection);
   }
 }
 
-// ABOUT SECTION TYPEWRITER
+// ABOUT SECTION TYPEWRITER — roda uma única vez, nunca reseta
 
 function initAboutTypewriter() {
-  const textEl      = document.getElementById('dialogue-text-content');
+  const textEl       = document.getElementById('dialogue-text-content');
   const aboutSection = document.getElementById('about');
   if (!textEl || !aboutSection) return;
 
-  let activeTw = null;
+  let done = false;
 
   const io = new IntersectionObserver(([e]) => {
-    if (e.isIntersecting) {
-      if (activeTw) {
-        activeTw.stop();
-        activeTw = null;
-      }
+    if (!e.isIntersecting || done) return;
+    done = true;
+    io.disconnect();
 
-      const fullText = textEl.dataset.text || '';
-      textEl.textContent = '';
+    const fullText = textEl.dataset.text || '';
+    textEl.textContent = '';
 
-      const tw = new Typewriter(textEl, fullText, 35);
-      activeTw = tw;
-      window._currentDialogueTw = tw;
+    const tw = new Typewriter(textEl, fullText, 35);
+    window._currentDialogueTw = tw;
+    setTimeout(() => tw.start(), 600);
 
-      setTimeout(() => tw.start(), 600);
-
-      setTimeout(() => {
-        document.querySelectorAll('.stat-bar-fill').forEach(bar => {
-          bar.classList.add('go');
-        });
-      }, 900);
-
-    } else {
-      if (activeTw) {
-        activeTw.stop();
-        activeTw = null;
-        window._currentDialogueTw = null;
-      }
-
-      textEl.textContent = '';
+    setTimeout(() => {
       document.querySelectorAll('.stat-bar-fill').forEach(bar => {
-        bar.classList.remove('go');
+        bar.classList.add('go');
       });
-      aboutSection.querySelectorAll('[data-reveal].revealed').forEach(el => {
-        el.classList.remove('revealed');
-      });
-    }
+    }, 900);
+
   }, { threshold: 0.25 });
 
   io.observe(aboutSection);
