@@ -70,10 +70,7 @@ class Typewriter {
       const jitter = Math.random() * 20 - 10;
       setTimeout(() => this._type(), this.speed + jitter);
     } else {
-      // digitação completa — esconde o cursor
-      if (this.cursor) {
-        this.cursor.style.display = 'none';
-      }
+      if (this.cursor) this.cursor.style.animationPlayState = 'running';
     }
   }
 }
@@ -250,7 +247,7 @@ const SKILLS_DATA = [
   { name: 'Python',          iconSlug: 'python',          iconColor: '3776AB', tier: 'gem',   lvl: '★★★☆☆', desc: 'Algoritmos, lógica e automação de scripts.' },
   { name: 'Git',             iconSlug: 'git',             iconColor: 'F05032', tier: 'gold',  lvl: '★★★★☆', desc: 'Controle de versão e git workflow na prática.' },
   { name: 'GitHub',          iconSlug: 'github',          iconColor: '181717', tier: 'gem',   lvl: '★★★★☆', desc: 'Repositórios, colaboração e projetos open source.' },
-  { name: 'VS Code',         iconSlug: 'vscode',          iconColor: '007ACC', tier: 'stone', lvl: '★★★★★', desc: 'Editor principal — extensões e produtividade.' },
+  { name: 'VS Code',         iconSlug: 'visualstudiocode', iconColor: '007ACC', tier: 'stone', lvl: '★★★★★', desc: 'Editor principal — extensões e produtividade.' },
   { name: 'Algorithms',      iconSlug: 'leetcode',        iconColor: 'FFA116', tier: 'ruby',  lvl: '★★★☆☆', desc: 'Algoritmos e resolução de problemas lógicos.' },
   { name: 'Data Structures', iconSlug: 'stackoverflow',   iconColor: 'F58025', tier: 'ruby',  lvl: '★★☆☆☆', desc: 'Estruturas de dados fundamentais em estudo.' },
   { name: 'Clean Code',      iconSlug: 'sonarqube',       iconColor: '4E9BCD', tier: 'stone', lvl: '★★★☆☆', desc: 'Código legível, padrões e boas práticas.' },
@@ -538,33 +535,52 @@ function observeSkills() {
   }
 }
 
-// ABOUT SECTION TYPEWRITER — roda só uma vez, cursor some ao terminar
+// ABOUT SECTION TYPEWRITER
 
 function initAboutTypewriter() {
-  const textEl       = document.getElementById('dialogue-text-content');
+  const textEl      = document.getElementById('dialogue-text-content');
   const aboutSection = document.getElementById('about');
   if (!textEl || !aboutSection) return;
 
-  let done = false;
+  let activeTw = null;
 
   const io = new IntersectionObserver(([e]) => {
-    if (!e.isIntersecting || done) return;
-    done = true;
-    io.disconnect();
+    if (e.isIntersecting) {
+      if (activeTw) {
+        activeTw.stop();
+        activeTw = null;
+      }
 
-    const fullText = textEl.dataset.text || '';
-    textEl.textContent = '';
+      const fullText = textEl.dataset.text || '';
+      textEl.textContent = '';
 
-    const tw = new Typewriter(textEl, fullText, 35);
-    window._currentDialogueTw = tw;
-    setTimeout(() => tw.start(), 600);
+      const tw = new Typewriter(textEl, fullText, 35);
+      activeTw = tw;
+      window._currentDialogueTw = tw;
 
-    setTimeout(() => {
+      setTimeout(() => tw.start(), 600);
+
+      setTimeout(() => {
+        document.querySelectorAll('.stat-bar-fill').forEach(bar => {
+          bar.classList.add('go');
+        });
+      }, 900);
+
+    } else {
+      if (activeTw) {
+        activeTw.stop();
+        activeTw = null;
+        window._currentDialogueTw = null;
+      }
+
+      textEl.textContent = '';
       document.querySelectorAll('.stat-bar-fill').forEach(bar => {
-        bar.classList.add('go');
+        bar.classList.remove('go');
       });
-    }, 900);
-
+      aboutSection.querySelectorAll('[data-reveal].revealed').forEach(el => {
+        el.classList.remove('revealed');
+      });
+    }
   }, { threshold: 0.25 });
 
   io.observe(aboutSection);
