@@ -989,6 +989,9 @@ class StackScroll {
     return 1 - Math.pow(1 - t, 2.5);
   }
 }
+
+// Mede a altura real do rodapé e expõe como --footer-h, para o bloco de contato
+// ocupar exatamente o resto da tela no fim da rolagem.
 function syncFooterHeight() {
   const footer = document.querySelector('.pixel-footer');
   if (!footer) return;
