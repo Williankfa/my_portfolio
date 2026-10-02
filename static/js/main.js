@@ -831,6 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
   observeSkills();
   initAboutTypewriter();
   initContactForm();
+  syncFooterHeight();
   spawnDinoScene();
 
   new StackScroll();
@@ -909,7 +910,9 @@ function initFullscreenBtn() {
 
 class StackScroll {
   constructor() {
-    this.sections = Array.from(document.querySelectorAll('section'));
+    // Só seções de nível raiz: <section class="video-side"> fica DENTRO de #projects
+    // e não pode entrar no efeito de empilhamento.
+    this.sections = Array.from(document.querySelectorAll('body > section'));
     if (this.sections.length < 2) return;
 
     this.navHeight  = 68;
@@ -925,7 +928,9 @@ class StackScroll {
   }
 
   setupSticky() {
-    this.sections.forEach(s => {
+    // A última seção (Tags + Contato) NÃO pode ser sticky: ela é mais alta que a
+    // tela e, grudada no topo, o final dela (contato) ficava cortado.
+    this.sections.slice(0, -1).forEach(s => {
       s.style.position = 'sticky';
       s.style.top      = `${this.navHeight}px`;
     });
@@ -983,4 +988,13 @@ class StackScroll {
   easeOut(t) {
     return 1 - Math.pow(1 - t, 2.5);
   }
+}
+function syncFooterHeight() {
+  const footer = document.querySelector('.pixel-footer');
+  if (!footer) return;
+  const set = () => document.documentElement.style.setProperty('--footer-h', footer.offsetHeight + 'px');
+  set();
+  window.addEventListener('resize', set);
+  window.addEventListener('load', set);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
 }

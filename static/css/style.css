@@ -27,6 +27,7 @@
   --stack-radius: 16px;
 
   --nav-height: 68px;
+  --footer-h: 125px; /* atualizado via JS (syncFooterHeight) */
 }
 
 /* ================================================================
@@ -1027,9 +1028,13 @@ section {
    ================================================================ */
 #projects {
   background: var(--black);
-  padding: var(--section-pad) 0 calc(var(--section-pad) * 1.5);
+  padding: var(--section-pad) 0 0; /* sem respiro embaixo: o contato fecha a página */
   z-index: 4;
   min-height: auto;
+  /* clip (e não hidden): o brilho do contato transborda a seção e, com hidden,
+     o scrollIntoView dos links do menu rolava a seção por dentro. */
+  overflow: hidden;
+  overflow: clip;
 }
 
 #projects::before {
@@ -1302,7 +1307,13 @@ section {
 /* ================================================================
    CONTACT
    ================================================================ */
-#contact { /* inherits from #projects */ }
+/* O bloco de contato ocupa exatamente a tela visível no fim da rolagem
+   (tela − nav fixo − rodapé), com o conteúdo centralizado. */
+#contact {
+  min-height: calc(100vh - var(--nav-height) - var(--footer-h));
+  min-height: calc(100dvh - var(--nav-height) - var(--footer-h));
+  padding: 40px 0;
+}
 
 .contact-glow {
   position: absolute;
