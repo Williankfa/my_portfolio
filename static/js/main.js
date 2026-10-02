@@ -309,135 +309,6 @@ function animateExpBars() {
   });
 }
 
-// ================================================================
-// PROJECTS GRID
-// ================================================================
-
-const PROJECTS_DATA = [
-  {
-    id:    'wasm',
-    name:  'WASM GUARDIAN',
-    color: '#00BCB4',
-    badge: null,
-    tags:  ['JavaScript', 'React', 'WebAssembly', 'Security'],
-    desc:  'Analisador estático local para engenharia reversa de binários WebAssembly. Roda 100% no browser — nenhum byte trafega pela rede. Valida a assinatura mágica do arquivo antes de qualquer processamento; mapeia seções internas (Type, Import, Function, Code, Data) exibindo offsets exatos e tamanhos; perfila opcodes em três categorias — fluxo de controle, operações de memória e lógica matemática — gerando um diagnóstico comportamental automático; calcula entropia Shannon (valores acima de 7.5 indicam ofuscação ou compressão); realiza taint analysis rastreando caminhos suspeitos entre imports externos e funções marcadas como críticas; extrai strings com filtros por URLs, tokens de autenticação e flags CTF; reconstrói strings montadas em runtime via sequências de opcodes; e decompila bytecode em pseudocódigo indentado e legível.',
-    link:  'https://williankfa.github.io/wasm-guardian',
-    repo:  'https://github.com/Williankfa/wasm-guardian',
-    wip:   false,
-  },
-  {
-    id:    'hashmax',
-    name:  'HASHMAX',
-    color: '#39d353',
-    badge: 'PROJETO EM GRUPO',
-    badgeColor: '#7f77dd',
-    tags:  ['HTML5', 'CSS3', 'JavaScript', 'CryptoJS'],
-    desc:  'Sistema avançado de criptografia web desenvolvido em equipe. Cobre codificação (Base64, Hexadecimal, Binário, URL Encoding RFC 3986 e Código Morse); criptografia simétrica com AES-256 padrão militar, AES-128, DES clássico, Triple DES, stream cipher Rabbit e RC4; criptografia assimétrica com RSA-2048 — geração completa de par de chaves pública/privada, cifragem e decifragem; e hashing com SHA-256, SHA-512, SHA-1, MD5, SHA-3 última geração e RIPEMD-160 pronto para Bitcoin. Recursos extras: histórico de operações persistido em localStorage, drag & drop para carregar arquivos, geração de QR Code para acesso rápido ao repositório, contadores de caracteres em tempo real e modal de membros integrado ao GitHub da equipe.',
-    link:  'https://jotavedreis.github.io/criptografia-HASHMAX/',
-    repo:  'https://github.com/jotavedreis/criptografia-HASHMAX',
-    wip:   false,
-  },
-  {
-    id:    'wifi',
-    name:  'AIC8800D80 FIX',
-    color: '#F05032',
-    badge: 'KERNEL 6.17',
-    badgeColor: '#cc0000',
-    tags:  ['C', 'Linux', 'Kernel', 'Driver', 'DKMS'],
-    desc:  'Driver fix para adaptadores WiFi com chipset AIC8800D80 — exibidos como 1111:1111 Pandora International Ltd. 88M80 no lsusb — que param de funcionar no Linux Kernel 6.17 devido a quebras de API. Afeta dispositivos como WIFI6-BW22/BW23, AX900 WiFi 6 USB Adapter e qualquer adaptador "900Mbps WiFi 6" não-identificado. Corrige cinco breaking changes introduzidos no kernel 6.17: remoção de from_timer e substituição por timer_container_of; assinaturas de cfg80211_rx_spurious_frame e cfg80211_rx_unexpected_4addr_frame com novo argumento obrigatório; mudança na assinatura de set_tx_power; e adição do parâmetro radio_idx em set_wiphy_params. A instalação é feita com um único script bash. Testado com sucesso no Zorin OS 17 com kernel 6.17.0-23-generic.',
-    link:  'https://github.com/Williankfa/AIC8800D80-kernel-6.17-fix',
-    repo:  'https://github.com/Williankfa/AIC8800D80-kernel-6.17-fix',
-    wip:   false,
-    repoOnly: true,
-  },
-  {
-    id:    'lyric',
-    name:  'MUSIC_APP',
-    color: '#D4A017',
-    badge: 'EM BREVE',
-    badgeColor: '#D4A017',
-    tags:  ['Linux', 'Python', 'GTK', 'LRC Sync'],
-    desc:  'App gerenciador de músicas nativo para Linux com letras sincronizadas linha a linha em tempo real. Cada faixa exibe a letra com destaque na linha atual conforme a música avança. Conta com playlists completas com fotos de capa e fotos dos artistas, aba de favoritos, ranking das músicas mais escutadas, miniplayer flutuante que persiste durante a navegação, botão de ordem aleatória, fila de reprodução editável com drag & drop, histórico de plays com estatísticas e controles de reprodução completos — play, pause, próxima, anterior e volume. Interface inspirada nos grandes players de desktop, reconstruída do zero para o ecossistema Linux.',
-    link:  null,
-    repo:  null,
-    wip:   true,
-  },
-];
-
-const PROJECT_SVG_ICONS = {
-  wasm: `<svg viewBox="0 0 24 24" width="52" height="52" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
-    <path d="M8 7l-4 4 4 4M16 7l4 4-4 4M13 6l-2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-  </svg>`,
-  hashmax: `<svg viewBox="0 0 24 24" width="52" height="52" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
-    <path d="M7 9h10M7 12h10M7 15h10M10 6v12M14 6v12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-  </svg>`,
-  wifi: `<svg viewBox="0 0 24 24" width="52" height="52" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3 9.5C6.5 6 10 4.5 12 4.5s5.5 1.5 9 5M6.5 13c1.5-1.5 3.5-2.5 5.5-2.5s4 1 5.5 2.5M9 16.5c.8-.8 1.8-1.5 3-1.5s2.2.7 3 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    <circle cx="12" cy="20" r="1.5" fill="currentColor"/>
-  </svg>`,
-  lyric: `<svg viewBox="0 0 24 24" width="52" height="52" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="8" cy="17" r="3" stroke="currentColor" stroke-width="1.5"/>
-    <circle cx="18" cy="15" r="3" stroke="currentColor" stroke-width="1.5"/>
-    <path d="M11 17V7l10-2v10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M5 10h14" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-dasharray="2 2"/>
-  </svg>`,
-};
-
-function buildProjectsGrid() {
-  const grid = document.getElementById('projects-grid');
-  if (!grid) return;
-
-  PROJECTS_DATA.forEach((proj, i) => {
-    const card = document.createElement('div');
-    card.className = 'proj-card';
-    if (proj.wip) card.classList.add('proj-card--wip');
-    card.style.animationDelay = `${i * 0.08}s`;
-
-    let badgeHTML = '';
-    if (proj.badge) {
-      badgeHTML = `<span class="proj-badge" style="border-color:${proj.badgeColor};color:${proj.badgeColor};">${proj.badge}</span>`;
-    }
-
-    let actionsHTML = '';
-    if (proj.wip) {
-      actionsHTML = `<span class="proj-btn proj-btn--soon">EM BREVE</span>`;
-    } else if (proj.repoOnly) {
-      actionsHTML = `<a href="${proj.repo}" target="_blank" rel="noopener" class="proj-btn proj-btn--ghost">REPO ↗</a>`;
-    } else {
-      actionsHTML = `
-        <a href="${proj.link}" target="_blank" rel="noopener" class="proj-btn">DEMO ↗</a>
-        <a href="${proj.repo}" target="_blank" rel="noopener" class="proj-btn proj-btn--ghost">REPO ↗</a>
-      `;
-    }
-
-    card.innerHTML = `
-      <div class="proj-card-top">
-        <div class="proj-icon" style="color:${proj.color};">
-          ${PROJECT_SVG_ICONS[proj.id] || PROJECT_SVG_ICONS.wasm}
-        </div>
-        <div class="proj-header">
-          <div class="proj-title-row">
-            <span class="proj-dot" style="background:${proj.color};box-shadow:0 0 6px ${proj.color}88;"></span>
-            <span class="proj-name">${proj.name}</span>
-            ${badgeHTML}
-          </div>
-          <div class="proj-tags">
-            ${proj.tags.map(t => `<span class="proj-tag">${t}</span>`).join('')}
-          </div>
-        </div>
-      </div>
-      <p class="proj-desc">${proj.desc}</p>
-      <div class="proj-actions">${actionsHTML}</div>
-    `;
-
-    card.style.setProperty('--proj-accent', proj.color);
-    grid.appendChild(card);
-  });
-}
-
-
 // SECTION TRANSITIONS (battle flash)
 
 function observeSectionTransitions() {
@@ -638,20 +509,46 @@ async function initContactForm() {
     e.preventDefault();
 
     const name    = form.querySelector('[name="name"]')?.value.trim()    || '';
+    const email   = form.querySelector('[name="email"]')?.value.trim()   || '';
+    const phone   = form.querySelector('[name="phone"]')?.value.trim()   || '';
     const message = form.querySelector('[name="message"]')?.value.trim() || '';
 
-    if (!name || !message) {
+    const showError = msg => {
       if (response) {
-        response.textContent = '* Preencha seu nome e mensagem antes de enviar.';
+        response.textContent = msg;
         response.classList.add('visible');
       }
+    };
+
+    if (!name || !message) {
+      showError('* Preencha seu nome e mensagem antes de enviar.');
+      return;
+    }
+    if (!email && !phone) {
+      showError('* Informe um e-mail ou um número para eu poder responder.');
+      return;
+    }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showError('* E-mail inválido. Confira e tente de novo.');
+      return;
+    }
+    if (phone && phone.replace(/\D/g, '').length < 8) {
+      showError('* Número inválido. Inclua o DDD (ex.: +55 91 90000-0000).');
       return;
     }
 
     const btn = form.querySelector('.submit-btn');
     if (btn) { btn.innerHTML = '* Sending... <span class="soul-mini">♥</span>'; btn.disabled = true; }
 
-    const text = ` *PORTFOLIO CONTACT*\n\n*Nome:* ${name}\n*Msg:* ${message}`;
+    // escapa caracteres especiais do Markdown (ex.: "_" em e-mails quebraria o envio)
+    const esc = s => s.replace(/([_*`\[])/g, '\\$1');
+
+    const text =
+      ` *PORTFOLIO CONTACT*\n\n` +
+      `*Nome:* ${esc(name)}\n` +
+      `*E-mail:* ${email ? esc(email) : '—'}\n` +
+      `*Número:* ${phone ? esc(phone) : '—'}\n` +
+      `*Msg:* ${esc(message)}`;
 
     try {
       const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -929,7 +826,6 @@ document.addEventListener('DOMContentLoaded', () => {
   buildHeroParallax();
 
   buildInventory();
-  buildProjectsGrid();
 
   observeSectionTransitions();
   observeSkills();
