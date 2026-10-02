@@ -30,7 +30,7 @@
     <div class="nav-links">
       <a href="#hero"     class="active" data-en="HOME"    data-pt="INÍCIO">HOME</a>
       <a href="#about"    data-en="ABOUT"   data-pt="SOBRE">ABOUT</a>
-      <a href="#projects" data-en="WORK"    data-pt="PROJETOS">WORK</a>
+      <a href="#projects" data-en="WORK"    data-pt="TRABALHO">WORK</a>
       <a href="#contact"  data-en="CONTACT" data-pt="CONTATO">CONTACT</a>
     </div>
     <div class="lang-toggle">
@@ -144,14 +144,68 @@
     </div>
   </section>
 
-  <section id="projects" aria-label="Projects and Contact" class="projects-contact-merged">
+  <section id="projects" aria-label="Tags HTML e vídeo favorito" class="projects-contact-merged">
     <div class="container">
       <div class="battle-header" data-reveal="up">
         <p class="encounter-label" data-en="⚔ ENCOUNTER" data-pt="⚔ ENCONTRO">⚔ ENCOUNTER</p>
-        <h2 class="section-heading" data-en="SELECTED PROJECTS" data-pt="PROJETOS">SELECTED PROJECTS</h2>
+        <h2 class="section-heading" data-en="TAGS" data-pt="TAGS">TAGS</h2>
       </div>
 
-      <div class="projects-grid" id="projects-grid" data-reveal="up" data-reveal-delay="100"></div>
+      <div class="tags-table-wrap" tabindex="0" aria-label="Tabela de tags HTML (role para ver todas)">
+        <div class="tags-cols">
+        <table class="tags-table">
+          <caption class="sr-only">Tags HTML, parte 1</caption>
+          <tbody>
+            <tr><td class="tag-name"><code>&lt;html&gt;</code></td><td>Raiz do documento; envolve toda a página.</td></tr>
+            <tr><td class="tag-name"><code>&lt;head&gt;</code></td><td>Metadados e recursos da página, que não aparecem na tela.</td></tr>
+            <tr><td class="tag-name"><code>&lt;title&gt;</code></td><td>Título exibido na aba do navegador.</td></tr>
+            <tr><td class="tag-name"><code>&lt;meta&gt;</code></td><td>Metadados: charset, descrição, viewport e cor do tema.</td></tr>
+            <tr><td class="tag-name"><code>&lt;link&gt;</code></td><td>Liga arquivos externos: CSS e fontes.</td></tr>
+            <tr><td class="tag-name"><code>&lt;style&gt;</code></td><td>CSS embutido na própria página.</td></tr>
+            <tr><td class="tag-name"><code>&lt;body&gt;</code></td><td>Todo o conteúdo visível.</td></tr>
+            <tr><td class="tag-name"><code>&lt;script&gt;</code></td><td>Carrega o JavaScript: idioma, animações, formulário e buraco negro.</td></tr>
+            <tr><td class="tag-name"><code>&lt;nav&gt;</code></td><td>Menu de navegação.</td></tr>
+            <tr><td class="tag-name"><code>&lt;section&gt;</code></td><td>Divisões do site: início, sobre, trabalho e vídeo.</td></tr>
+            <tr><td class="tag-name"><code>&lt;footer&gt;</code></td><td>Rodapé.</td></tr>
+            <tr><td class="tag-name"><code>&lt;h1&gt; – &lt;h6&gt;</code></td><td>Títulos: h1 é o nome no início, h2 os títulos de seção.</td></tr>
+            <tr><td class="tag-name"><code>&lt;div&gt;</code></td><td>Caixa genérica para organizar e estilizar.</td></tr>
+            <tr><td class="tag-name"><code>&lt;p&gt;</code></td><td>Parágrafo de texto.</td></tr>
+            <tr><td class="tag-name"><code>&lt;br&gt;</code></td><td>Quebra de linha.</td></tr>
+            <tr><td class="tag-name"><code>&lt;img&gt;</code></td><td>Imagem: a foto de perfil.</td></tr>
+          </tbody>
+        </table>
+        <table class="tags-table">
+          <caption class="sr-only">Tags HTML, parte 2</caption>
+          <tbody>
+            <tr><td class="tag-name"><code>&lt;iframe&gt;</code></td><td>Página incorporada: o vídeo favorito.</td></tr>
+            <tr><td class="tag-name"><code>&lt;canvas&gt;</code></td><td>Área de desenho do JavaScript: o buraco negro 3D.</td></tr>
+            <tr><td class="tag-name"><code>&lt;svg&gt;</code></td><td>Gráfico vetorial: ícones e desenhos.</td></tr>
+            <tr><td class="tag-name"><code>&lt;a&gt;</code></td><td>Link.</td></tr>
+            <tr><td class="tag-name"><code>&lt;code&gt;</code></td><td>Trecho de código: os nomes desta tabela.</td></tr>
+            <tr><td class="tag-name"><code>&lt;span&gt;</code></td><td>Trecho de texto em linha, para estilizar.</td></tr>
+            <tr><td class="tag-name"><code>&lt;table&gt;</code></td><td>Tabela de dados.</td></tr>
+            <tr><td class="tag-name"><code>&lt;caption&gt;</code></td><td>Título da tabela (oculto, para leitores de tela).</td></tr>
+            <tr><td class="tag-name"><code>&lt;tbody&gt;</code></td><td>Corpo da tabela.</td></tr>
+            <tr><td class="tag-name"><code>&lt;tr&gt;</code></td><td>Linha da tabela.</td></tr>
+            <tr><td class="tag-name"><code>&lt;td&gt;</code></td><td>Célula de dados.</td></tr>
+            <tr><td class="tag-name"><code>&lt;form&gt;</code></td><td>Formulário de contato.</td></tr>
+            <tr><td class="tag-name"><code>&lt;label&gt;</code></td><td>Rótulo de cada campo.</td></tr>
+            <tr><td class="tag-name"><code>&lt;input&gt;</code></td><td>Campo de uma linha: nome, e-mail e telefone.</td></tr>
+            <tr><td class="tag-name"><code>&lt;button&gt;</code></td><td>Botão: idioma e enviar.</td></tr>
+            <tr><td class="tag-name"><code>&lt;textarea&gt;</code></td><td>Campo de várias linhas: a mensagem.</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+      <section class="video-side" data-reveal="up" aria-label="Vídeo favorito">
+        <p class="encounter-label" data-en="♫ NOW PLAYING" data-pt="♫ TOCANDO AGORA">♫ NOW PLAYING</p>
+        <h2 class="section-heading video-heading" data-en="FAVORITE VIDEO" data-pt="FAVORITE VIDEO">FAVORITE VIDEO</h2>
+        <div class="video-ratio">
+          <iframe src="https://commons.wikimedia.org/w/index.php?title=File:Drifting.webm&amp;embedplayer=yes" title="Favorite video — Drifting" loading="lazy" allowfullscreen></iframe>
+        </div>
+        <p class="video-credit">"Drifting" — Drift Mechaniks / High Resolution Database, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>, via <a href="https://commons.wikimedia.org/wiki/File:Drifting.webm" target="_blank" rel="noopener">Wikimedia Commons ↗</a></p>
+      </section>
 
       <div class="projects-contact-divider" aria-hidden="true"></div>
 
@@ -191,6 +245,14 @@
             <div class="form-field">
               <label for="input-name" data-en="YOUR NAME" data-pt="SEU NOME">YOUR NAME</label>
               <input id="input-name" name="name" type="text" data-en-placeholder="Enter your name..." data-pt-placeholder="Digite seu nome..." placeholder="Enter your name..." autocomplete="name" required />
+            </div>
+            <div class="form-field">
+              <label for="input-email" data-en="YOUR EMAIL" data-pt="SEU E-MAIL">YOUR EMAIL</label>
+              <input id="input-email" name="email" type="email" data-en-placeholder="you@email.com" data-pt-placeholder="voce@email.com" placeholder="you@email.com" autocomplete="email" inputmode="email" />
+            </div>
+            <div class="form-field">
+              <label for="input-phone" data-en="PHONE / WHATSAPP" data-pt="TELEFONE / WHATSAPP">PHONE / WHATSAPP</label>
+              <input id="input-phone" name="phone" type="tel" data-en-placeholder="+55 91 90000-0000" data-pt-placeholder="+55 91 90000-0000" placeholder="+55 91 90000-0000" autocomplete="tel" inputmode="tel" />
             </div>
             <div class="form-field">
               <label for="input-message" data-en="MESSAGE" data-pt="MENSAGEM">MESSAGE</label>

@@ -1894,3 +1894,74 @@ section {
     font-size: 7px;
   }
 }
+/* ================================================================
+   TAGS TABLE + FAVORITE VIDEO
+   ================================================================ */
+.sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
+
+.tags-table-wrap {
+  overflow: auto; max-height: min(78vh, 720px);
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.02);
+}
+.tags-cols { display: grid; grid-template-columns: 1fr 1fr; align-items: start; min-width: 0; }
+.tags-cols .tags-table + .tags-table { border-left: 1px solid rgba(255,255,255,0.12); }
+.tags-table { width: 100%; border-collapse: collapse; text-align: left; }
+.tags-table thead th {
+  position: sticky; top: 0; z-index: 2;
+  background: var(--dark);
+  font-family: var(--font-pixel); font-size: 8px; letter-spacing: 3px;
+  color: var(--red); padding: 16px 18px;
+  border-bottom: 2px solid var(--red);
+}
+.tags-table td {
+  padding: 10px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-family: var(--font-retro); font-size: 20px; line-height: 1.2;
+  color: var(--off-white); vertical-align: top;
+}
+.tags-table td:first-child { width: 36%; white-space: nowrap; }
+.tags-table .tag-name code { font-family: var(--font-pixel); font-size: 10px; color: var(--yellow); }
+.tags-table tbody tr:not(.tag-cat):hover { background: rgba(255,255,255,0.04); box-shadow: inset 3px 0 0 var(--red); }
+.tags-table .tag-cat th {
+  font-family: var(--font-pixel); font-size: 7px; letter-spacing: 4px; color: var(--red);
+  padding: 20px 18px 10px; background: rgba(204,0,0,0.06);
+  border-bottom: 1px solid rgba(204,0,0,0.35);
+}
+
+.video-side { max-width: 860px; margin: calc(var(--section-pad) * 0.8) auto 0; text-align: center; }
+.video-heading { margin-bottom: 24px; }
+.video-ratio {
+  position: relative; aspect-ratio: 16 / 9;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-left: 3px solid var(--red);
+  background: var(--black);
+}
+.video-ratio iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.video-credit { margin-top: 14px; font-family: var(--font-retro); font-size: 17px; line-height: 1.2; color: var(--light-gray); }
+.video-credit a { color: var(--yellow); }
+
+@media (max-width: 960px) {
+  .tags-cols { grid-template-columns: 1fr; }
+  .tags-cols .tags-table + .tags-table { border-left: 0; border-top: 2px solid var(--red); }
+}
+
+@media (max-width: 600px) {
+  .tags-table thead th, .tags-table td, .tags-table .tag-cat th { padding-left: 12px; padding-right: 12px; }
+  .tags-table td { font-size: 18px; }
+  .tags-table td:first-child { width: auto; }
+  .tags-table .tag-name code { font-size: 8px; }
+}
+
+/* Autofill do navegador deixava os campos do formulário brancos */
+.form-field input:-webkit-autofill,
+.form-field input:-webkit-autofill:hover,
+.form-field input:-webkit-autofill:focus,
+.form-field textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--white);
+  caret-color: var(--white);
+  -webkit-box-shadow: 0 0 0 1000px var(--black) inset;
+  box-shadow: 0 0 0 1000px var(--black) inset;
+  transition: background-color 9999s ease-out 0s;
+}
+.form-field input, .form-field textarea { color-scheme: dark; }
