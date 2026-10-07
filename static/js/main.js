@@ -309,7 +309,7 @@ function animateExpBars() {
   });
 }
 
-// SECTION TRANSITIONS (battle flash)
+// SECTION TRANSITIONS
 
 function observeSectionTransitions() {
   let lastSection = '';
@@ -324,13 +324,6 @@ function observeSectionTransitions() {
       document.querySelectorAll('.nav-links a').forEach(a => {
         a.classList.toggle('active', a.getAttribute('href') === `#${id}`);
       });
-
-      if (id === 'projects') {
-        const flash = document.createElement('div');
-        flash.className = 'battle-flash';
-        document.body.appendChild(flash);
-        setTimeout(() => flash.remove(), 600);
-      }
 
       if (id === 'about') {
         const flash = document.createElement('div');
@@ -446,9 +439,6 @@ class ChiptuneAudio {
     this.btn?.addEventListener('click', () => this.toggle());
     document.querySelectorAll('.nav-links a, .pixel-btn').forEach(el => {
       el.addEventListener('click', () => this.beep(523, 0.08, 0.1));
-    });
-    document.querySelectorAll('.proj-card').forEach(el => {
-      el.addEventListener('mouseenter', () => this.beep(660, 0.06, 0.08));
     });
   }
 
@@ -910,8 +900,7 @@ function initFullscreenBtn() {
 
 class StackScroll {
   constructor() {
-    // Só seções de nível raiz: <section class="video-side"> fica DENTRO de #projects
-    // e não pode entrar no efeito de empilhamento.
+    // Só seções de nível raiz.
     this.sections = Array.from(document.querySelectorAll('body > section'));
     if (this.sections.length < 2) return;
 
@@ -928,7 +917,7 @@ class StackScroll {
   }
 
   setupSticky() {
-    // A última seção (Tags + Contato) NÃO pode ser sticky: ela é mais alta que a
+    // A última seção (Contato) NÃO pode ser sticky: ela é mais alta que a
     // tela e, grudada no topo, o final dela (contato) ficava cortado.
     this.sections.slice(0, -1).forEach(s => {
       s.style.position = 'sticky';
@@ -989,6 +978,9 @@ class StackScroll {
     return 1 - Math.pow(1 - t, 2.5);
   }
 }
+
+// Mede a altura real do rodapé e expõe como --footer-h, para o bloco de contato
+// ocupar exatamente o resto da tela no fim da rolagem.
 function syncFooterHeight() {
   const footer = document.querySelector('.pixel-footer');
   if (!footer) return;
